@@ -1,9 +1,19 @@
-import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+// import { axiosPrivate } from "./api/axios";
 // import useAuth from "./hooks/useAuth";
 
+// export async function loader() {
+//   try {
+//     const documents = await axiosPrivate.get("/documents");
+//     return { documents };
+//   } catch {
+//     return { documents: [] };
+//   }
+// }
+
 export default function Root() {
-  const [auth, setAuth] = useState({});
+  // const { documents } = useLoaderData();
+  // const [auth, setAuth] = useState({});
   const navigate = useNavigate();
   return (
     <>
@@ -49,7 +59,7 @@ export default function Root() {
           </div>
         </header>
         <div>
-          <Outlet context={[auth, setAuth]} />
+          <Outlet />
         </div>
       </div>
     </>
