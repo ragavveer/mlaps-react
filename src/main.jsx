@@ -8,10 +8,13 @@ import AuthGuard from "./routes/authguard";
 import Root from "./root";
 import RoleGuard from "./routes/roleguard";
 import { AuthProvider } from "./context/AuthProvider";
+import { Provider } from 'react-redux';
+import store from './redux/store'; 
 
 const router = createBrowserRouter([
   {
     path: "/",
+    // element: <Login />,
     element: <AuthGuard />,
     children: [
       {
@@ -34,7 +37,10 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <AuthProvider>
+  // <AuthProvider>
+  //   <RouterProvider router={router}></RouterProvider>
+  // </AuthProvider>
+  <Provider store={store}>
     <RouterProvider router={router}></RouterProvider>
-  </AuthProvider>
+  </Provider>
 );

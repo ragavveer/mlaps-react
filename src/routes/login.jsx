@@ -1,35 +1,52 @@
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch,  useSelector} from 'react-redux';
+import { login } from '../redux/action/LoginAction';
 
 export default function Login() {
   const { setAuth } = useAuth();
   const [errMsg, setErrMsg] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const getToken = useSelector(state => state?.authentication?.loginData?.accessToken);
+  console.log('gettokennnn->',getToken)
+  if(getToken) {
+    navigate('/');
+  }
   // const location = useLocation();
   // const from = location.state?.from?.pathname || "/";
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
+    const formvalues = {
+      "username": "veeraragavan.v@hcl.com",
+      "password": "ragavanV"
+    }
+
     try {
-      const {
-        data: { accessToken },
-      } = await axios.post(
-        "/auth",
-        { username, password },
-        {
-          withCredentials: true,
-        }
-      );
+      dispatch(login(formvalues));
 
-      console.log(accessToken);
+      // const {
+      //   data: { accessToken },
+      // } = await axios.post(
+      //   "/auth",
+      //   { username, password },
+      //   {
+      //     withCredentials: true,
+      //   }
+      // );
 
-      setAuth({ accessToken });
+      // console.log(accessToken);
+
+      // setAuth({ accessToken });
 
       // await new Promise((resolve) => {
       //   setTimeout(() => {
@@ -43,7 +60,7 @@ export default function Login() {
       //   withCredentials: true,
       // });
 
-      navigate("/");
+      // navigate("/");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");

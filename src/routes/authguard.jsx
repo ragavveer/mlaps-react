@@ -1,10 +1,15 @@
 import { Outlet } from "react-router-dom";
+import { useSelector} from 'react-redux';
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import useRefreshToken from "../hooks/useRefreshToken";
 
 export default function AuthGuard() {
-  const { auth } = useAuth();
+
+  const getToken = useSelector(state => state?.authentication?.loginData?.accessToken);
+  console.log('auth guard testing->',getToken);
+
+  const [initialLoad, setInitialLoad]  = useState(true);
   const refresh = useRefreshToken();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,17 +24,24 @@ export default function AuthGuard() {
         isMounted && setIsLoading(false);
       }
     };
-    if (!auth?.accessToken) {
+    if (!getToken && initialLoad) {
       verifyRefreshToken();
+      setInitialLoad(false);
     }
     return () => (isMounted = false);
-  }, [auth?.accessToken, refresh, setIsLoading]);
+  }, [getToken, refresh, setIsLoading, initialLoad]);
 
-  console.log(auth);
+  console.log(getToken);
   return (
     <div>
       Auth Guard
       {isLoading ? <p>Loading</p> : <Outlet />}
     </div>
   );
+  // return (
+  // <>
+  // <p>Auth guard found</p>
+  // <Outlet />
+  // </>
+  // )
 }
