@@ -1,19 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useSelector} from 'react-redux';
-import useAuth from "../hooks/useAuth";
+import { useSelector } from "react-redux";
 
 export default function RoleGuard() {
-  // const { auth } = useAuth();
-  const getToken = useSelector(state => state?.authentication?.loginData?.accessToken);
-  console.log('roleguard testing->',getToken)
-
-  // console.log(auth);
+  const getToken = useSelector(
+    (state) => state?.authentication?.loginData?.accessToken
+  );
+  console.log("roleguard testing->", getToken);
   return (
     <div>
       Role Guard
-      
+      {!getToken ? <Navigate to="login" /> : <Navigate to="users" />}
       <Outlet />
-      {!getToken && <Navigate to="login" />}
     </div>
   );
 }

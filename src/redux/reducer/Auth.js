@@ -1,38 +1,46 @@
-import * as type from '../types';
+import * as type from "../types";
 
 const initialState = {
   loginData: [],
-  refreshData: [],
   loading: false,
   error: null,
-}
+};
 
 export default function users(state = initialState, action) {
   switch (action.type) {
-    case type.GET_LOGIN_REQUESTED:
+    case type.LOGIN_REQUESTED:
       return {
         ...state,
         loading: true,
-      }
+      };
     case type.LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
-        loginData: action?.res?.data
-      }
+        loginData: action?.res?.data,
+      };
     case type.LOGIN_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.message,
-      }
-      case type.REFRESH_SUCCESS:
+      };
+    case type.LOGOUT_REQUESTED:
       return {
         ...state,
-        refreshData: action?.res?.data,
-        error: action.message,
-      }
+        loading: true,
+      };
+    case type.LOGOUT_SUCCESS:
+    case type.LOGOUT_FAILURE:
+      return {
+        ...initialState,
+      };
+    case type.REFRESH_REQUESTED:
+      return {
+        ...initialState,
+        loading: true,
+      };
     default:
-      return state
+      return state;
   }
 }

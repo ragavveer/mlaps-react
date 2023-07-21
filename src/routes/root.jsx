@@ -1,20 +1,24 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-// import { axiosPrivate } from "./api/axios";
-// import useAuth from "./hooks/useAuth";
+import { useDispatch } from "react-redux";
 
-// export async function loader() {
-//   try {
-//     const documents = await axiosPrivate.get("/documents");
-//     return { documents };
-//   } catch {
-//     return { documents: [] };
-//   }
-// }
+import { logout } from "../redux/action/LoginAction";
 
 export default function Root() {
-  // const { documents } = useLoaderData();
-  // const [auth, setAuth] = useState({});
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   console.log("users component");
+  //   const timeOut = setTimeout(() => dispatch(documents()));
+  //   return () => clearTimeout(timeOut);
+  // }, [dispatch]);
+
   const navigate = useNavigate();
+
+  function handleLogout() {
+    dispatch(logout());
+    navigate("/login");
+  }
+
   return (
     <>
       <div className="container">
@@ -50,7 +54,7 @@ export default function Root() {
               Change Password
             </button>
             <button
-              onClick={() => navigate("logout")}
+              onClick={handleLogout}
               type="button"
               className="btn btn-primary"
             >

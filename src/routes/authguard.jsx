@@ -1,47 +1,18 @@
 import { Outlet } from "react-router-dom";
-import { useSelector} from 'react-redux';
-import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import useRefreshToken from "../hooks/useRefreshToken";
+import { useSelector } from "react-redux";
 
 export default function AuthGuard() {
+  const accessToken = useSelector(
+    (state) => state?.authentication?.loginData?.accessToken
+  );
+  const loading = useSelector((state) => state?.authentication?.loading);
 
-  const getToken = useSelector(state => state?.authentication?.loginData?.accessToken);
-  console.log('auth guard testing->',getToken);
+  console.log("auth guard testing->", accessToken, loading);
 
-  const [initialLoad, setInitialLoad]  = useState(true);
-  const refresh = useRefreshToken();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    const verifyRefreshToken = async () => {
-      try {
-        await refresh();
-      } catch (err) {
-        console.log(err);
-      } finally {
-        isMounted && setIsLoading(false);
-      }
-    };
-    if (!getToken && initialLoad) {
-      verifyRefreshToken();
-      setInitialLoad(false);
-    }
-    return () => (isMounted = false);
-  }, [getToken, refresh, setIsLoading, initialLoad]);
-
-  console.log(getToken);
   return (
     <div>
       Auth Guard
-      {isLoading ? <p>Loading</p> : <Outlet />}
+      {loading ? <p>Loading</p> : <Outlet />}
     </div>
   );
-  // return (
-  // <>
-  // <p>Auth guard found</p>
-  // <Outlet />
-  // </>
-  // )
 }

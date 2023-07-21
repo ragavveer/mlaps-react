@@ -1,77 +1,33 @@
-import { useNavigate } from "react-router-dom";
-import axios from "../api/axios";
-import useAuth from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import { useDispatch,  useSelector} from 'react-redux';
-import { login } from '../redux/action/LoginAction';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/action/LoginAction";
 
 export default function Login() {
-  const { setAuth } = useAuth();
-  const [errMsg, setErrMsg] = useState(null);
+  const [errMsg] = useState(null);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getToken = useSelector(state => state?.authentication?.loginData?.accessToken);
-  console.log('gettokennnn->',getToken)
-  if(getToken) {
-    navigate('/');
-  }
-  // const location = useLocation();
-  // const from = location.state?.from?.pathname || "/";
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
     const formvalues = {
-      "username": "veeraragavan.v@hcl.com",
-      "password": "ragavanV"
-    }
+      username,
+      password,
+    };
+    dispatch(login(formvalues));
 
-    try {
-      dispatch(login(formvalues));
-
-      // const {
-      //   data: { accessToken },
-      // } = await axios.post(
-      //   "/auth",
-      //   { username, password },
-      //   {
-      //     withCredentials: true,
-      //   }
-      // );
-
-      // console.log(accessToken);
-
-      // setAuth({ accessToken });
-
-      // await new Promise((resolve) => {
-      //   setTimeout(() => {
-      //     resolve("");
-      //   }, 2000);
-      // });
-
-      // const {
-      //   data: { accessToken: acc },
-      // } = await axios.get("/refresh", {
-      //   withCredentials: true,
-      // });
-
-      // navigate("/");
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username or Password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg("Login Failed");
-      }
-    }
+    // } catch (err) {
+    //   if (!err?.response) {
+    //     setErrMsg("No Server Response");
+    //   } else if (err.response?.status === 400) {
+    //     setErrMsg("Missing Username or Password");
+    //   } else if (err.response?.status === 401) {
+    //     setErrMsg("Unauthorized");
+    //   } else {
+    //     setErrMsg("Login Failed");
+    //   }
+    // }
   };
 
   return (

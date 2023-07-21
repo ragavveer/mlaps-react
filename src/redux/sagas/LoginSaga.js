@@ -1,40 +1,69 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from "redux-saga/effects";
 import axios from "../../api/axios";
+import {
+  LOGIN,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  REFRESH,
+  REFRESH_REQUESTED,
+} from "../types";
 
 function getloginData(val) {
-    const {username, password} = val;
-    const data = axios.post("/auth",{ username, password },{withCredentials: true,});
-    return data;   
-}
-function getRefreshData() {
-   
-    const response = axios.get("/refresh", {withCredentials: true,});
-    return response;   
+  const { username, password } = val;
+  const data = axios.post(
+    "/auth",
+    { username, password },
+    { withCredentials: true }
+  );
+  return data;
 }
 
-function* loginDetails(action) {
-    
-    const val = action.payload;
-    // const {data: { accessToken }} = axios.post("/auth",{ username, password },{withCredentials: true,});
-    // const data = axios.post("/auth",{ val },{withCredentials: true,});
-    try {
-        const loginData = yield call(getloginData,val);
-       yield put({ type: 'LOGIN_SUCCESS', res: loginData });
-    } catch (err) {
-       yield put({ type: 'LOGIN_FAILURE', message: err });
-    }
- }
- function* refreshDetails() {
-    try {
-        const refreshData = yield call(getRefreshData);
-       yield put({ type: 'LOGIN_SUCCESS', res: refreshData });
-    } catch (err) {
-       yield put({ type: 'LOGIN_FAILURE', message: err });
-    }
- }
-function* loginSaga() {
-    yield takeLatest('LOGIN', loginDetails);
-    yield takeLatest('REFRESH', refreshDetails);
- }
- 
- export default loginSaga;
+function getLogoutData() {
+  const response = axios.get("/logout", { withCredentials: true });
+  return response;
+}
+
+function getRefreshData() {
+  const response = axios.get("/refresh", { withCredentials: true });
+  return response;
+}
+
+function* login(action) {
+  const val = action.payload;
+  try {
+    const loginData = yield call(getloginData, val);
+    yield put({ type: LOGIN_SUCCESS, res: loginData });
+  } catch (err) {
+    yield put({ type: LOGIN_FAILURE, message: err });
+  }
+}
+
+function* logout() {
+  try {
+    yield call(getLogoutData);
+    yield put({ type: LOGOUT_SUCCESS });
+  } catch (err) {
+    yield put({ type: LOGOUT_FAILURE, message: err });
+  }
+}
+
+function* refresh() {
+  try {
+    yield put({ type: REFRESH_REQUESTED });
+    const refreshData = yield call(getRefreshData);
+    yield put({ type: LOGIN_SUCCESS, res: refreshData });
+  } catch (err) {
+    yield put({ type: LOGIN_FAILURE, message: err });
+  }
+}
+
+function* authSaga() {
+  yield takeLatest(LOGIN, login);
+  yield takeLatest(LOGOUT, logout);
+  yield takeLatest(REFRESH, refresh);
+}
+
+export default authSaga;
