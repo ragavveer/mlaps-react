@@ -36,7 +36,7 @@ function* login(action) {
   const val = action.payload;
   try {
     const loginData = yield call(getloginData, val);
-    loginData.data = { ...loginData.data, ...ROLE_MAPPING[1] };
+    loginData.data = { ...loginData.data, ...ROLE_MAPPING[0] };
     yield put({ type: LOGIN_SUCCESS, res: loginData });
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, message: err });
@@ -56,7 +56,7 @@ function* refresh() {
   try {
     yield put({ type: REFRESH_REQUESTED });
     const refreshData = yield call(getRefreshData);
-    refreshData.data = { ...refreshData.data, ...ROLE_MAPPING[1] };
+    refreshData.data = { ...refreshData.data, ...ROLE_MAPPING[0] };
     yield put({ type: LOGIN_SUCCESS, res: refreshData });
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, message: err });

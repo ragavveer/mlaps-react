@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/action/LoginAction";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [errMsg] = useState(null);
 
   const dispatch = useDispatch();
@@ -16,6 +20,7 @@ export default function Login() {
       password,
     };
     dispatch(login(formvalues));
+    navigate(`../${location.state}`, { replace: true });
 
     // } catch (err) {
     //   if (!err?.response) {

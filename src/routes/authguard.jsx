@@ -5,6 +5,8 @@ export default function AuthGuard() {
   const accessToken = useSelector(
     (state) => state?.authentication?.loginData?.accessToken
   );
+
+  // blocking the screen until the refresh API call either succeed or failure
   const loading = useSelector((state) => state?.authentication?.loading);
 
   console.log("auth guard testing->", accessToken, loading);
