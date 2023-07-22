@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/action/LoginAction";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -7,7 +7,15 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log(location.state);
+
   const [errMsg] = useState(null);
+
+  const accessToken = useSelector(
+    (state) => state?.authentication?.loginData?.accessToken
+  );
+
+  const menu = useSelector((state) => state?.authentication?.loginData?.menu);
 
   const dispatch = useDispatch();
 
@@ -19,9 +27,8 @@ export default function Login() {
       username,
       password,
     };
+    console.log(location.state);
     dispatch(login(formvalues));
-    navigate(`../${location.state}`, { replace: true });
-
     // } catch (err) {
     //   if (!err?.response) {
     //     setErrMsg("No Server Response");
@@ -34,6 +41,24 @@ export default function Login() {
     //   }
     // }
   };
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log("after login action dispatch");
+      const path = location.state;
+      if (path === "") {
+        if (menu?.length > 0) {
+          // user refresh/enters url with no segments, like "/". So we need to select the default menu
+          navigate(`../${menu[0]}`, { replace: true });
+        } else {
+          // user refresh/enters url with no segments, like "/". But users dont have menu options.
+          navigate(`../default`, { replace: true });
+        }
+      } else {
+        navigate(`../${location.state}`, { replace: true });
+      }
+    }
+  }, [accessToken, location.state, menu, navigate]);
 
   return (
     <main className="form-signin w-100 m-auto">
