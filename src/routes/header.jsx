@@ -2,9 +2,10 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../redux/action/LoginAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -14,13 +15,14 @@ export default function Header() {
 
   function handleLogout() {
     dispatch(logout());
+    setIsLoggedOut(true);
   }
 
   useEffect(() => {
-    if (!accessToken) {
+    if (!accessToken && isLoggedOut) {
       navigate("/login", { state: "" });
     }
-  }, [accessToken, navigate]);
+  }, [accessToken, isLoggedOut, navigate]);
 
   return (
     <>
