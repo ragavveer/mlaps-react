@@ -11,7 +11,11 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { injectStore } from "./interceptor/interceptor";
 import { refresh } from "./redux/action/LoginAction";
-import Users from "./routes/users";
+import Header from "./routes/header";
+import Default from "./routes/default";
+import Upload from "./routes/upload";
+import Entities from "./routes/entities";
+import Members from "./routes/members";
 injectStore(store);
 
 store.dispatch(refresh());
@@ -26,11 +30,21 @@ const router = createBrowserRouter([
         element: <RoleGuard />,
         children: [
           {
-            element: <Root />,
+            element: <Header />,
             children: [
               {
-                path: "users",
-                element: <Users />,
+                element: <Root />,
+                children: [
+                  { path: "upload", element: <Upload /> },
+
+                  { path: "entity", element: <Entities /> },
+
+                  { path: "members", element: <Members /> },
+                ],
+              },
+              {
+                path: "default",
+                element: <Default />,
               },
             ],
           },

@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { documents } from "../redux/action/UserManagementAction";
 
-export default function Users() {
+export default function Members() {
   const data = useSelector((state) => state?.userManagement?.documents);
   console.log(data);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("users component");
+    console.log("members component");
     const timeOut = setTimeout(() => dispatch(documents()));
     return () => clearTimeout(timeOut);
   }, [dispatch]);
