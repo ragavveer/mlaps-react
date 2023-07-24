@@ -1,21 +1,30 @@
 /* eslint-disable react/prop-types */
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Login from "./routes/login";
-import AuthGuard from "./routes/authguard";
-import Root from "./routes/root";
-import RoleGuard from "./routes/roleguard";
-import { Provider } from "react-redux";
+
+import * as ReactDOM from "react-dom/client";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+
 import store from "./redux/store";
-import { injectStore } from "./interceptor/interceptor";
+import { Provider } from "react-redux";
 import { refresh } from "./redux/action/LoginAction";
-import Header from "./routes/header";
-import Default from "./routes/default";
-import Upload from "./routes/upload";
-import Entities from "./routes/entities";
-import Members from "./routes/members";
+import { injectStore } from "./interceptor/interceptor";
+
+import AuthGuard from "./routes/protected/authguard";
+import Root from "./routes/protected/root";
+import RoleGuard from "./routes/protected/roleguard";
+import Header from "./routes/protected/header";
+import Default from "./routes/protected/default";
+import Upload from "./routes/protected/upload";
+import Entities from "./routes/protected/entities";
+import Members from "./routes/protected/members";
+import Cover from "./routes/static/cover";
+import Login from "./routes/protected/login";
+import About from "./routes/static/about";
 injectStore(store);
 
 store.dispatch(refresh());
@@ -26,7 +35,7 @@ const router = createBrowserRouter([
     element: <AuthGuard />,
     children: [
       {
-        path: "",
+        path: "authorized",
         element: <RoleGuard />,
         children: [
           {
@@ -50,11 +59,29 @@ const router = createBrowserRouter([
           },
           {
             path: "login",
-            element: <Login></Login>,
+            element: <Login />,
+          },
+        ],
+      },
+      {
+        path: "",
+        element: <Navigate to="home" />,
+      },
+      {
+        path: "home",
+        element: <Cover />,
+        children: [
+          {
+            path: "about",
+            element: <About />,
           },
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <>404 - Page</>,
   },
 ]);
 

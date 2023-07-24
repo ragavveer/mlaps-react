@@ -9,7 +9,7 @@ export default function Root() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const path = location.pathname.slice(1);
+  const path = location.pathname.replace("/authorized/", "");
   const menu = useSelector((state) => state?.authentication?.loginData?.menu);
 
   // let value = menu?.[0];

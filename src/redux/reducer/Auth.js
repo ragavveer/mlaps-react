@@ -8,16 +8,11 @@ const initialState = {
 
 export default function users(state = initialState, action) {
   switch (action.type) {
-    case type.LOGIN_REQUESTED:
-      return {
-        ...state,
-        loading: true,
-      };
     case type.LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
-        loginData: action?.res?.data,
+        loginData: { ...action?.res?.data },
       };
     case type.LOGIN_FAILURE:
       return {

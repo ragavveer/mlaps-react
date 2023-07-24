@@ -9,6 +9,7 @@ import {
   LOGOUT_FAILURE,
   REFRESH,
   REFRESH_REQUESTED,
+  // LOGIN_REQUESTED,
 } from "../types";
 import { ROLE_MAPPING } from "../../models/roles-config";
 
@@ -33,10 +34,10 @@ function getRefreshData() {
 }
 
 function* login(action) {
-  const val = action.payload;
+  const { formData, from } = action.payload;
   try {
-    const loginData = yield call(getloginData, val);
-    loginData.data = { ...loginData.data, ...ROLE_MAPPING[0] };
+    const loginData = yield call(getloginData, formData);
+    loginData.data = { ...loginData.data, ...ROLE_MAPPING[0], from };
     yield put({ type: LOGIN_SUCCESS, res: loginData });
   } catch (err) {
     yield put({ type: LOGIN_FAILURE, message: err });
