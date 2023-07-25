@@ -5,12 +5,14 @@ import Tab from "@mui/material/Tab";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
+import { menu } from "../../features/Auth/authSlice";
+
 export default function Root() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const path = location.pathname.replace("/authorized/", "");
-  const menu = useSelector((state) => state?.authentication?.loginData?.menu);
+  const protectedMenu = useSelector(menu);
 
   // let value = menu?.[0];
   const [value, setValue] = useState(path);
@@ -27,9 +29,15 @@ export default function Root() {
         onChange={handleChange}
         aria-label="lab API tabs example"
       >
-        {menu?.includes("upload") && <Tab label="Upload" value="upload" />}
-        {menu?.includes("entity") && <Tab label="Entity" value="entity" />}
-        {menu?.includes("members") && <Tab label="Members" value="members" />}
+        {protectedMenu?.includes("upload") && (
+          <Tab label="Upload" value="upload" />
+        )}
+        {protectedMenu?.includes("entity") && (
+          <Tab label="Entity" value="entity" />
+        )}
+        {protectedMenu?.includes("members") && (
+          <Tab label="Members" value="members" />
+        )}
       </Tabs>
       <Outlet />
     </>

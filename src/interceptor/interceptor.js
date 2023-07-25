@@ -1,5 +1,5 @@
 import { axiosPrivate } from "../api/axios";
-import { refresh } from "../redux/action/LoginAction";
+import { userRefresh } from "../features/Auth/authSlice";
 
 let store;
 
@@ -9,9 +9,10 @@ export const injectStore = (_store) => {
 
 axiosPrivate.interceptors.request.use(
   (config) => {
+    console.log("inside request interceptor");
     if (!config.headers["Authorization"]) {
       config.headers["Authorization"] = `Bearer ${
-        store.getState().authentication?.loginData?.accessToken
+        store.getState().auth?.loginData?.accessToken
       }`;
     }
     return config;
@@ -23,11 +24,12 @@ axiosPrivate.interceptors.response.use(
   (response) => response,
   async (error) => {
     const prevRequest = error?.config;
+    console.log(prevRequest.sent);
     if (error?.response?.status === 403 && !prevRequest?.sent) {
       prevRequest.sent = true;
-      store.dispatch(refresh());
+      await store.dispatch(userRefresh()).unwrap();
       prevRequest.headers["Authorization"] = `Bearer ${
-        store.getState().authentication?.loginData?.accessToken
+        store.getState().auth?.loginData?.accessToken
       }`;
       return axiosPrivate(prevRequest);
     }

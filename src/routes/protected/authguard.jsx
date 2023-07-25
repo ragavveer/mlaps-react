@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { status } from "../../features/Auth/authSlice";
+
 export default function AuthGuard() {
   // blocking the screen until the refresh API call either succeed or failure
-  const loading = useSelector((state) => state?.authentication?.loading);
+  const fetchStatus = useSelector(status);
 
-  console.log("auth guard testing->", loading);
+  console.log("auth guard testing->", fetchStatus);
 
   return (
     <div>
       Auth Guard
-      {loading ? <p>Loading</p> : <Outlet />}
+      {fetchStatus === "loading" ? <p>Loading</p> : <Outlet />}
     </div>
   );
 }

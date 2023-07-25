@@ -1,18 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import { token, menu, from } from "../../features/Auth/authSlice";
+
 export default function RoleGuard() {
   let { pathname } = window.location;
 
   pathname = pathname.replace("/authorized/", "");
 
-  const accessToken = useSelector(
-    (state) => state?.authentication?.loginData?.accessToken
-  );
+  const accessToken = useSelector(token);
 
-  const menu = useSelector((state) => state?.authentication?.loginData?.menu);
+  const protectedMenu = useSelector(menu);
 
-  const from = useSelector((state) => state?.authentication?.loginData?.from);
+  const loginFrom = useSelector(from);
 
   let naviagationElement;
 
@@ -20,18 +20,18 @@ export default function RoleGuard() {
     // refresh token is expired or not available
     naviagationElement = <Navigate to="login" state={pathname} />;
   } else {
-    let path = from ?? pathname;
+    let path = loginFrom ?? pathname;
 
     path = path === "login" ? "" : path;
 
     const isNavigatedToLogin =
-      from !== undefined && from !== null ? true : false;
+      loginFrom !== undefined && loginFrom !== null ? true : false;
 
     if (path === "") {
-      if (menu?.length > 0) {
+      if (protectedMenu?.length > 0) {
         // user refresh/enters url with no segments, like "/authorized". So we need to select the default menu
         naviagationElement = (
-          <Navigate to={menu[0]} replace={isNavigatedToLogin} />
+          <Navigate to={protectedMenu[0]} replace={isNavigatedToLogin} />
         );
       } else {
         // user refresh/enters url with no segments, like "/authorized". But users dont have menu options.

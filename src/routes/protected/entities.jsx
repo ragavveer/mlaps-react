@@ -1,18 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { documents } from "../../redux/action/UserManagementAction";
+import {
+  getEntities,
+  entityList,
+} from "../../features/UserManagement/userManagementSlice";
 
 export default function Entities() {
-  const data = useSelector((state) => state?.userManagement?.documents);
-  console.log(data);
+  const [isMount, setIsMount] = useState(true);
   const dispatch = useDispatch();
+  const data = useSelector(entityList);
+  console.log(data);
 
   useEffect(() => {
-    console.log("entities component");
-    const timeOut = setTimeout(() => dispatch(documents()));
-    return () => clearTimeout(timeOut);
-  }, [dispatch]);
+    if (isMount) {
+      console.log("inside the use effect");
+      setIsMount(false);
+      dispatch(getEntities());
+    }
+  }, [dispatch, isMount]);
 
   return (
     <div>

@@ -1,28 +1,27 @@
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../../redux/action/LoginAction";
-import { useEffect, useState } from "react";
+import { userLogout } from "../../features/Auth/authSlice";
+// import { useEffect, useState } from "react";
 
 export default function Header() {
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  // const [isLoggedOut, setIsLoggedOut] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const accessToken = useSelector(
-    (state) => state?.authentication?.loginData?.accessToken
-  );
+  // const accessToken = useSelector( token );
 
-  function handleLogout() {
-    dispatch(logout());
-    setIsLoggedOut(true);
+  async function handleLogout() {
+    await dispatch(userLogout()).unwrap();
+    navigate("/home", { state: "" });
+    // setIsLoggedOut(true);
   }
 
-  useEffect(() => {
-    if (!accessToken && isLoggedOut) {
-      navigate("/home", { state: "" });
-    }
-  }, [accessToken, isLoggedOut, navigate]);
+  // useEffect(() => {
+  //   if (!accessToken && isLoggedOut) {
+  //     navigate("/home", { state: "" });
+  //   }
+  // }, [accessToken, isLoggedOut, navigate]);
 
   return (
     <>

@@ -1,18 +1,25 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { documents } from "../../redux/action/UserManagementAction";
+import {
+  getEntities,
+  entityList,
+} from "../../features/UserManagement/userManagementSlice";
 
 export default function Members() {
-  const data = useSelector((state) => state?.userManagement?.documents);
-  console.log(data);
   const dispatch = useDispatch();
+  const data = useSelector(entityList);
+  console.log(data);
+
+  // useEffect(() => {
+  //   console.log("members component");
+  //   const timeOut = setTimeout(() => dispatch(documents()));
+  //   return () => clearTimeout(timeOut);
+  // }, [dispatch]);
 
   useEffect(() => {
-    console.log("members component");
-    const timeOut = setTimeout(() => dispatch(documents()));
-    return () => clearTimeout(timeOut);
-  }, [dispatch]);
+    dispatch(getEntities());
+  }, []);
 
   return (
     <div>

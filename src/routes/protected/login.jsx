@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/action/LoginAction";
+import { userLogin } from "../../features/Auth/authSlice";
 import { useLocation } from "react-router-dom";
 
 export default function Login() {
@@ -18,7 +18,7 @@ export default function Login() {
       password,
     };
     console.log(location.state);
-    dispatch(login({ from: location.state, formData }));
+    dispatch(userLogin({ from: location.state, formData }));
   };
 
   return (
