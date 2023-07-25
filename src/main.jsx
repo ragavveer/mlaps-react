@@ -11,7 +11,7 @@ import {
 
 import { store } from "./app/store";
 import { Provider } from "react-redux";
-import { userRefresh } from "./features/Auth/authSlice";
+import { appLoading, userRefresh } from "./features/Auth/authSlice";
 import { injectStore } from "./interceptor/interceptor";
 
 import AuthGuard from "./routes/protected/authguard";
@@ -27,6 +27,7 @@ import Login from "./routes/protected/login";
 import About from "./routes/static/about";
 injectStore(store);
 
+store.dispatch(appLoading());
 store.dispatch(userRefresh());
 
 const router = createBrowserRouter([
