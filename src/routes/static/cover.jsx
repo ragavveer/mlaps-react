@@ -6,9 +6,14 @@ export default function Cover() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const path = location.pathname.replace("/home/", "");
-
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(() => {
+    const path = location.pathname.replace("/home", "");
+    return path === ""
+      ? false
+      : path.startsWith("/")
+      ? path.replace("/", "")
+      : path;
+  });
 
   function handleChange(event, newValue) {
     setValue(() => newValue);
@@ -27,7 +32,6 @@ export default function Cover() {
           Login
         </Button>
         <Tabs
-          s
           value={value}
           onChange={handleChange}
           aria-label="lab API tabs example"
