@@ -73,6 +73,10 @@ const router = createBrowserRouter([
         element: <Cover />,
         children: [
           {
+            path: "",
+            element: <p>Cover Page</p>,
+          },
+          {
             path: "about",
             element: <About />,
           },

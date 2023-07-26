@@ -1,0 +1,7 @@
+.top-bar {
+    background-size: 100%!important;
+    background: url("../../assets/topbar.png");
+    height: 6px!important;
+    width: 100%;
+
+}

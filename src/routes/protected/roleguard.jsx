@@ -46,10 +46,9 @@ export default function RoleGuard() {
   }
 
   return (
-    <div>
-      Role Guard
+    <>
       {naviagationElement}
       <Outlet />
-    </div>
+    </>
   );
 }

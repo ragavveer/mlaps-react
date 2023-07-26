@@ -9,10 +9,5 @@ export default function AuthGuard() {
 
   console.log("auth guard testing->", status);
 
-  return (
-    <div>
-      Auth Guard
-      {status === "loading" ? <p>Loading</p> : <Outlet />}
-    </div>
-  );
+  return <>{status === "loading" ? <p>Loading</p> : <Outlet />}</>;
 }
